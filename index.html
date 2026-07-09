@@ -57,11 +57,19 @@ body::after { content:""; position:fixed; inset:0; z-index:99; pointer-events:no
   background:linear-gradient(90deg, #e29a6c 0%, #d9a05b 30%, #a8bd8f 62%, #8fb4b0 100%); opacity:.8; }
 
 .tabs { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
-.tab { font-family:'Karla'; font-weight:800; font-size:11.5px; letter-spacing:.3px;
+.tab { position:relative; font-family:'Karla'; font-weight:800; font-size:11.5px; letter-spacing:.3px;
   padding:11px 2px; border:0.5px solid var(--line); border-radius:13px;
   background:var(--panel); color:var(--dim); cursor:pointer; transition:background .15s, color .15s; }
 .tab.active { background:linear-gradient(135deg,var(--sun1),var(--sun2)); color:#241611; border-color:transparent; }
 .tab.core.active { background:var(--ocean); color:#152220; }
+.duedot { position:absolute; top:5px; right:7px; width:6px; height:6px; border-radius:50%; background:var(--amber); }
+.tab.active .duedot { background:rgba(36,22,17,.55); }
+.nudge { display:none; align-items:center; gap:8px; margin:0 0 10px; background:var(--sun-soft);
+  border:0.5px solid rgba(226,154,108,.32); border-radius:12px; padding:9px 12px;
+  font-size:12px; color:#ddd5c8; cursor:pointer; }
+.nudge b { color:var(--sun1); }
+.suggest.stall { background:rgba(196,122,114,.12); border-color:rgba(196,122,114,.35); }
+.suggest.stall .tag { color:var(--rose); }
 .daytag { font-size:11.5px; color:var(--dim); font-weight:600; letter-spacing:.8px;
   text-transform:uppercase; margin:14px 4px 6px; }
 .guide { margin:6px 0 4px; }
@@ -85,20 +93,20 @@ body::after { content:""; position:fixed; inset:0; z-index:99; pointer-events:no
 .main-pill { font-family:'Spline Sans Mono'; font-size:9.5px; font-weight:600; letter-spacing:.6px;
   color:#241611; background:linear-gradient(135deg,var(--sun1),var(--sun2)); border-radius:6px; padding:2px 6px; }
 .ex-name { font-weight:800; font-size:15px; line-height:1.25; letter-spacing:.1px; }
-.ex-target { font-family:'Fraunces',serif; font-weight:600; font-size:15px; color:var(--amber); white-space:nowrap; }
+.ex-target { font-family:'Spline Sans Mono'; font-size:12px; font-weight:600; color:var(--amber); white-space:nowrap; padding-top:2px; }
 .ex-note { font-size:11.5px; color:var(--dim); margin-top:5px; line-height:1.5; }
 .last-line { display:flex; align-items:center; gap:9px; margin:10px 0 0; flex-wrap:wrap; }
 .last-label { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.7px; color:var(--dim); }
 .last-label.dim { text-transform:none; letter-spacing:0; font-weight:500; font-size:12px; }
-.last-vals { font-family:'Fraunces',serif; font-weight:500; font-size:14px; color:#c3bbac; }
+.last-vals { font-family:'Spline Sans Mono',monospace; font-weight:500; font-size:12px; color:#b3ab9c; }
 .hist-btn { background:transparent; border:none; color:var(--dim); cursor:pointer; display:flex; padding:2px; }
-.delta { margin-left:auto; display:flex; align-items:center; gap:3px; font-family:'Fraunces',serif; font-weight:600; font-size:13px; padding:2px 8px; border-radius:7px; }
+.delta { margin-left:auto; display:flex; align-items:center; gap:3px; font-family:'Spline Sans Mono',monospace; font-weight:600; font-size:11.5px; padding:2px 8px; border-radius:7px; }
 .delta.up { color:var(--sage); background:var(--sage-soft); }
 .delta.down { color:var(--rose); background:rgba(196,122,114,.12); }
 .hist-box { background:var(--bg); border:0.5px solid var(--line); border-radius:12px; padding:9px 11px; margin-top:10px; display:flex; flex-direction:column; gap:5px; }
 .hist-row { display:flex; gap:12px; align-items:baseline; }
 .hist-date { font-size:10.5px; color:var(--dim); font-weight:700; min-width:46px; }
-.hist-sets { font-family:'Fraunces',serif; font-weight:500; font-size:13px; color:#a89f8f; }
+.hist-sets { font-family:'Spline Sans Mono',monospace; font-weight:500; font-size:11.5px; color:#a39a8b; }
 .suggest { display:flex; align-items:center; gap:9px; margin-top:10px;
   background:var(--sun-soft); border:0.5px solid rgba(226,154,108,.32); border-radius:13px; padding:9px 12px; }
 .suggest.hold { background:var(--ocean-soft); border-color:rgba(143,180,176,.32); }
@@ -106,7 +114,7 @@ body::after { content:""; position:fixed; inset:0; z-index:99; pointer-events:no
   text-transform:uppercase; color:var(--sun1); flex-shrink:0; }
 .suggest.hold .tag { color:var(--ocean); }
 .suggest .txt { font-size:12.5px; line-height:1.45; color:#ddd5c8; font-weight:500; }
-.suggest .txt b { font-family:'Fraunces',serif; font-weight:600; font-size:14px; color:var(--text); }
+.suggest .txt b { font-family:'Spline Sans Mono',monospace; font-weight:600; font-size:12.5px; color:var(--text); }
 .rest { display:flex; align-items:center; gap:11px; margin-top:10px;
   background:rgba(47,43,38,.55); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   border:0.5px solid rgba(217,160,91,.3); border-radius:13px; padding:8px 12px;
@@ -203,6 +211,7 @@ body.progress .progress-view { display:block; }
   <div class="horizon"></div>
 
   <div class="log-view">
+    <div class="nudge" id="nudge"></div>
     <nav class="tabs" id="tabs"></nav>
     <div class="daytag" id="daytag"></div>
     <div class="guide" id="guide">
@@ -231,9 +240,9 @@ body.progress .progress-view { display:block; }
         <div class="tile-sub" id="tSessionsSub">workouts logged</div>
       </div>
       <div class="tile">
-        <div class="tile-k">At all-time best</div>
+        <div class="tile-k">Lifts at a peak</div>
         <div class="tile-big num" id="tPRs">0</div>
-        <div class="tile-sub">lifts at their peak est. 1RM</div>
+        <div class="tile-sub">latest session was your best yet — estimated from your normal sets, no maxing</div>
       </div>
       <div class="tile wide">
         <div class="tile-k" style="margin-bottom:8px;">This week's volume</div>
@@ -395,6 +404,20 @@ function suggestFor(ex, prev){
   if(!prev || !prev.sets.length) return null;
   const [lo,hi] = repRange(ex.rep);
   const unit = ex.unit==="sec" ? "s" : " reps";
+  /* stall check: no improvement across the last 3 sessions */
+  const t = isoToday();
+  const priorAll = (prev.history||[]).filter(s=>s.d!==t);
+  if(priorAll.length>=3){
+    const met = s => ex.bw ? Math.max(...s.sets.map(x=>x.r)) : epley(s.sets);
+    const m = priorAll.slice(-3).map(met);
+    if(m[1]<=m[0] && m[2]<=m[0]){
+      if(ex.bw) return { stall:true, html:'No progress in 3 sessions — ease off to an easier variation and rebuild, or swap the movement.' };
+      const topW = Math.max(...priorAll[priorAll.length-1].sets.map(s=>s.w));
+      const step = topW < 30 ? 2.5 : 5;
+      const back = Math.max(step, Math.round((topW*0.9)/step)*step);
+      return { stall:true, html:'Stalled 3 sessions — drop to <b>'+back+' lb</b> and rebuild reps, or swap the movement.' };
+    }
+  }
   if(ex.bw){
     const reps = prev.sets.map(s=>s.r);
     const minR = Math.min(...reps);
@@ -488,15 +511,27 @@ function autoSave(){
     store.set(dayKey(dayId), hist);
     histCache[dayId]=hist;
     flashSave("saved");
+    updateNudge();
   }, 700);
 }
 
+function dueDay(){
+  const rot=["upperA","lowerA","upperB","lowerB"];
+  let bestDay=null, bestDate="";
+  rot.forEach(id=>{
+    const h=getHist(id);
+    Object.values(h).forEach(arr=>arr.forEach(s=>{ if(s.d>bestDate){ bestDate=s.d; bestDay=id; } }));
+  });
+  if(!bestDay) return "upperA";
+  return rot[(rot.indexOf(bestDay)+1)%4];
+}
 function renderTabs(){
   const el = document.getElementById("tabs"); el.innerHTML = "";
+  const due = dueDay();
   WORKOUTS.forEach(w=>{
     const b = document.createElement("button");
     b.className = "tab"+(w.id==="core"?" core":"")+(w.id===activeId?" active":"");
-    b.textContent = w.name;
+    b.innerHTML = w.name + (w.id===due ? '<span class="duedot"></span>' : '');
     b.onclick = ()=>{ stopRest(false); activeId=w.id; initDayEntries(activeId); renderList(); renderTabs(); };
     el.appendChild(b);
   });
@@ -524,7 +559,7 @@ function renderList(){
 
     const sugg = suggestFor(ex, prev);
     const suggHtml = sugg
-      ? '<div class="suggest'+(sugg.hold?' hold':'')+'"><span class="tag">Next up</span><span class="txt">'+sugg.html+'</span></div>'
+      ? '<div class="suggest'+(sugg.stall?' stall':(sugg.hold?' hold':''))+'"><span class="tag">'+(sugg.stall?'Stalled':'Next up')+'</span><span class="txt">'+sugg.html+'</span></div>'
       : '';
 
     let rowsHtml = '<div class="set-rows">';
@@ -548,7 +583,7 @@ function renderList(){
     card.innerHTML = '<div class="card-top"><div class="ex-head">'+
       (ex.main?'<span class="main-pill">MAIN</span>':'')+
       (ex.ss?'<span class="ss-pill">SS '+ex.ss+'</span>':'')+
-      '<span class="ex-name">'+ex.name+'</span></div><span class="ex-target num">'+ex.sets+'×'+ex.rep+'</span></div>'+
+      '<span class="ex-name">'+ex.name+'</span></div><span class="ex-target">'+ex.sets+'×'+ex.rep+'</span></div>'+
       (ex.note?'<div class="ex-note">'+ex.note+'</div>':'')+
       '<div class="last-line">'+lastHtml+deltaHtml+'</div>'+histHtml+suggHtml+rowsHtml;
 
@@ -725,6 +760,25 @@ function backup(){
   const data={ version:4, app:"buff-bobin", exported:new Date().toISOString(), days:{} };
   WORKOUTS.forEach(d=> data.days[d.id]=getHist(d.id));
   download("buff-bobin-backup.json", JSON.stringify(data,null,2), "application/json");
+  store.set("lastBackup", isoToday());
+  updateNudge();
+}
+function sessionsSinceBackup(){
+  const lb = store.get("lastBackup") || "";
+  const dates = new Set();
+  WORKOUTS.forEach(d=>{
+    const h=getHist(d.id);
+    Object.values(h).forEach(arr=>arr.forEach(s=>{ if(s.d>lb) dates.add(s.d); }));
+  });
+  return dates.size;
+}
+function updateNudge(){
+  const el=document.getElementById("nudge");
+  const n=sessionsSinceBackup();
+  if(n>=10){
+    el.style.display="flex";
+    el.innerHTML='<b>'+n+' sessions</b>&nbsp;since your last backup — tap to back up now.';
+  } else el.style.display="none";
 }
 function restore(file){
   const reader=new FileReader();
@@ -771,10 +825,14 @@ document.getElementById("btnBackup").onclick=backup;
 document.getElementById("btnRestore").onclick=()=>document.getElementById("fileIn").click();
 document.getElementById("fileIn").onchange=e=>{ if(e.target.files[0]) restore(e.target.files[0]); e.target.value=""; };
 
+document.getElementById("nudge").onclick=backup;
+
 initDayEntries(activeId);
 buildSelect();
 renderTabs();
 renderList();
+updateNudge();
+if("serviceWorker" in navigator){ try{ navigator.serviceWorker.register("./sw.js"); }catch(e){} }
 </script>
 </body>
 </html>
