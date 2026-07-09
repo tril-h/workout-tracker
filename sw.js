@@ -1,7 +1,7 @@
 /* Buffin' service worker — offline support.
    Strategy: serve from cache instantly, refresh the cache in the background.
    The app loads with zero signal; updates arrive on the next open. */
-const CACHE = "buffin-v4";
+const CACHE = "buffin-v4-3";
 
 self.addEventListener("install", e => {
   e.waitUntil(

@@ -38,7 +38,8 @@ body::after { content:""; position:fixed; inset:0; z-index:99; pointer-events:no
   background:rgba(28,26,24,.72); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
   border-bottom:0.5px solid rgba(58,53,46,.65); }
 .brand h1 { font-family:'Fraunces',serif; font-weight:700; font-size:24px; letter-spacing:.2px; line-height:1; }
-.brand .sub { font-size:10.5px; color:var(--dim); letter-spacing:1.2px; font-weight:600; text-transform:uppercase; margin-top:4px; display:block; }
+.brand .sub { font-size:10.5px; color:var(--dim); letter-spacing:1.2px; font-weight:600; text-transform:uppercase; margin-top:4px; display:block; white-space:nowrap; }
+.brand .sub #verStamp { color:var(--sun1); letter-spacing:.5px; }
 .hdr-right { display:flex; align-items:center; gap:10px; padding-bottom:1px; }
 .savestate { font-family:'Spline Sans Mono',monospace; font-size:10px; font-weight:600; color:var(--dim);
   opacity:0; transition:opacity .25s; white-space:nowrap; }
@@ -197,7 +198,7 @@ body.progress .progress-view { display:block; }
   <header class="hdr">
     <div class="brand">
       <h1>Buffin'</h1>
-      <span class="sub">Hypertrophy log · <span id="verStamp"></span></span>
+      <span class="sub">Workout log · <span id="verStamp"></span></span>
     </div>
     <div class="hdr-right">
       <span class="savestate" id="saveState">Saved ✓</span>
@@ -274,7 +275,7 @@ body.progress .progress-view { display:block; }
   </div>
 
 <script>
-const APP_VERSION = "v4";
+const APP_VERSION = "v4.3";
 const WORKOUTS = [
   { id:"upperA", name:"Up A", tag:"Horizontal push / pull", exercises:[
     { id:"ua_press",   name:"Chest Press (machine / flat DB)", sets:3, rep:"6–10",  ss:"",  main:true },
