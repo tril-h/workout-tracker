@@ -1,7 +1,7 @@
 /* Buff Bobin service worker — offline support.
    Strategy: serve from cache instantly, refresh the cache in the background.
    The app loads with zero signal; updates arrive on the next open. */
-const CACHE = "buff-bobin-v1";
+const CACHE = "buff-bobin-v4-jul9";
 
 self.addEventListener("install", e => {
   e.waitUntil(

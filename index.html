@@ -197,7 +197,7 @@ body.progress .progress-view { display:block; }
   <header class="hdr">
     <div class="brand">
       <h1>Buff Bobin</h1>
-      <span class="sub">Hypertrophy log</span>
+      <span class="sub">Hypertrophy log · <span id="verStamp"></span></span>
     </div>
     <div class="hdr-right">
       <span class="savestate" id="saveState">Saved ✓</span>
@@ -274,6 +274,7 @@ body.progress .progress-view { display:block; }
   </div>
 
 <script>
+const APP_VERSION = "v4 · Jul 9";
 const WORKOUTS = [
   { id:"upperA", name:"Up A", tag:"Horizontal push / pull", exercises:[
     { id:"ua_press",   name:"Chest Press (machine / flat DB)", sets:3, rep:"6–10",  ss:"",  main:true },
@@ -825,6 +826,7 @@ document.getElementById("btnBackup").onclick=backup;
 document.getElementById("btnRestore").onclick=()=>document.getElementById("fileIn").click();
 document.getElementById("fileIn").onchange=e=>{ if(e.target.files[0]) restore(e.target.files[0]); e.target.value=""; };
 
+document.getElementById("verStamp").textContent = APP_VERSION;
 document.getElementById("nudge").onclick=backup;
 
 initDayEntries(activeId);
