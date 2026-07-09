@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Buff Bobin — Lift Tracker</title>
+<title>Buffin' — Lift Tracker</title>
 <meta name="theme-color" content="#1c1a18">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Buff Bobin">
+<meta name="apple-mobile-web-app-title" content="Buffin'">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23e29a6c'/%3E%3Cstop offset='.55' stop-color='%23cf7a5a'/%3E%3Cstop offset='1' stop-color='%238fb4b0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='42' fill='%231c1a18'/%3E%3Cg stroke='url(%23g)' stroke-width='11' stroke-linecap='round' fill='none'%3E%3Cpath d='M55 90h70'/%3E%3Cpath d='M48 70v40M40 78v24M132 70v40M140 78v24'/%3E%3C/g%3E%3C/svg%3E">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@500;600&display=swap');
@@ -196,7 +196,7 @@ body.progress .progress-view { display:block; }
 <body>
   <header class="hdr">
     <div class="brand">
-      <h1>Buff Bobin</h1>
+      <h1>Buffin'</h1>
       <span class="sub">Hypertrophy log · <span id="verStamp"></span></span>
     </div>
     <div class="hdr-right">
@@ -274,7 +274,7 @@ body.progress .progress-view { display:block; }
   </div>
 
 <script>
-const APP_VERSION = "v4 · Jul 9";
+const APP_VERSION = "v4";
 const WORKOUTS = [
   { id:"upperA", name:"Up A", tag:"Horizontal push / pull", exercises:[
     { id:"ua_press",   name:"Chest Press (machine / flat DB)", sets:3, rep:"6–10",  ss:"",  main:true },
@@ -755,12 +755,12 @@ function exportCSV(){
   WORKOUTS.forEach(d=>{ const h=getHist(d.id);
     d.exercises.forEach(ex=>{ (h[ex.id]||[]).forEach(sess=>{ sess.sets.forEach((s,i)=>{
       rows.push([sess.d, d.name, '"'+ex.name.replace(/"/g,'""')+'"', i+1, s.w, s.r]); }); }); }); });
-  download("buff-bobin-history.csv", rows.map(r=>r.join(",")).join("\n"), "text/csv");
+  download("buffin-history.csv", rows.map(r=>r.join(",")).join("\n"), "text/csv");
 }
 function backup(){
-  const data={ version:4, app:"buff-bobin", exported:new Date().toISOString(), days:{} };
+  const data={ version:4, app:"buffin", exported:new Date().toISOString(), days:{} };
   WORKOUTS.forEach(d=> data.days[d.id]=getHist(d.id));
-  download("buff-bobin-backup.json", JSON.stringify(data,null,2), "application/json");
+  download("buffin-backup.json", JSON.stringify(data,null,2), "application/json");
   store.set("lastBackup", isoToday());
   updateNudge();
 }
@@ -803,7 +803,7 @@ function restore(file){
       initDayEntries(activeId);
       renderList(); renderChart(); renderRecov(); renderTiles();
       alert("Backup restored.");
-    }catch(e){ alert("Couldn't read that file. Make sure it's a Buff Bobin backup (.json)."); }
+    }catch(e){ alert("Couldn't read that file. Make sure it's a Buffin' backup (.json)."); }
   };
   reader.readAsText(file);
 }
