@@ -57,7 +57,18 @@ body::after { content:""; position:fixed; inset:0; z-index:99; pointer-events:no
 .horizon { height:3px; border-radius:3px; margin:12px 2px 14px;
   background:linear-gradient(90deg, #e29a6c 0%, #d9a05b 30%, #a8bd8f 62%, #8fb4b0 100%); opacity:.8; }
 
-.tabs { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
+.modebar { display:flex; align-items:center; gap:6px; margin:0 0 10px; }
+.modebar .lbl { font-size:10px; letter-spacing:.8px; text-transform:uppercase; color:var(--faint); font-weight:700; margin-right:2px; }
+.modebar button { font-family:'Karla'; font-weight:700; font-size:11px; padding:6px 11px;
+  border:0.5px solid var(--line); border-radius:9px; background:var(--panel); color:var(--dim); cursor:pointer; }
+.modebar button.active { border-color:rgba(226,154,108,.5); color:var(--sun1); background:var(--sun-soft); }
+
+.nudge { display:none; align-items:center; gap:8px; margin:0 0 10px; background:var(--sun-soft);
+  border:0.5px solid rgba(226,154,108,.32); border-radius:12px; padding:9px 12px;
+  font-size:12px; color:#ddd5c8; cursor:pointer; }
+.nudge b { color:var(--sun1); }
+
+.tabs { display:grid; gap:5px; }
 .tab { position:relative; font-family:'Karla'; font-weight:800; font-size:11.5px; letter-spacing:.3px;
   padding:11px 2px; border:0.5px solid var(--line); border-radius:13px;
   background:var(--panel); color:var(--dim); cursor:pointer; transition:background .15s, color .15s; }
@@ -65,10 +76,6 @@ body::after { content:""; position:fixed; inset:0; z-index:99; pointer-events:no
 .tab.core.active { background:var(--ocean); color:#152220; }
 .duedot { position:absolute; top:5px; right:7px; width:6px; height:6px; border-radius:50%; background:var(--amber); }
 .tab.active .duedot { background:rgba(36,22,17,.55); }
-.nudge { display:none; align-items:center; gap:8px; margin:0 0 10px; background:var(--sun-soft);
-  border:0.5px solid rgba(226,154,108,.32); border-radius:12px; padding:9px 12px;
-  font-size:12px; color:#ddd5c8; cursor:pointer; }
-.nudge b { color:var(--sun1); }
 .suggest.stall { background:rgba(196,122,114,.12); border-color:rgba(196,122,114,.35); }
 .suggest.stall .tag { color:var(--rose); }
 .daytag { font-size:11.5px; color:var(--dim); font-weight:600; letter-spacing:.8px;
@@ -142,7 +149,6 @@ body::after { content:""; position:fixed; inset:0; z-index:99; pointer-events:no
   background:transparent; border:none; color:var(--sage); font-family:'Karla'; font-weight:700; font-size:12px; cursor:pointer; padding:4px 2px; }
 svg { display:block; }
 
-/* ---------- PROGRESS: bento ---------- */
 .progress-view { display:none; margin-top:12px; }
 body.progress .log-view { display:none; }
 body.progress .progress-view { display:block; }
@@ -152,7 +158,6 @@ body.progress .progress-view { display:block; }
 .tile.wide { grid-column:1 / -1; }
 .tile-k { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--dim); }
 .tile-big { font-family:'Fraunces',serif; font-weight:600; font-size:44px; line-height:1.05; margin-top:6px; letter-spacing:-.5px; }
-.tile-big small { font-size:16px; color:var(--dim); font-weight:500; letter-spacing:0; }
 .tile-sub { font-size:11px; color:var(--faint); margin-top:4px; line-height:1.4; }
 .recov-row { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:0.5px solid rgba(58,53,46,.55); }
 .recov-row:last-of-type { border-bottom:none; }
@@ -212,6 +217,11 @@ body.progress .progress-view { display:block; }
   <div class="horizon"></div>
 
   <div class="log-view">
+    <div class="modebar" id="modebar">
+      <span class="lbl">Split</span>
+      <button data-mode="ul">Upper / Lower</button>
+      <button data-mode="ppl">Push / Pull / Legs</button>
+    </div>
     <div class="nudge" id="nudge"></div>
     <nav class="tabs" id="tabs"></nav>
     <div class="daytag" id="daytag"></div>
@@ -222,12 +232,12 @@ body.progress .progress-view { display:block; }
         <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </button>
       <div class="guide-body">
+        <p><b>Two splits, one history.</b> Upper/Lower (3–4 days) is home base; switch to Push/Pull/Legs (5–6 days) in high-energy weeks. Every lift's weights, suggestions, and charts carry across both.</p>
         <p><b>Auto-save.</b> Everything you type is saved for today automatically. Edit any time today and it updates today's entry.</p>
-        <p><b>Rest timer.</b> Finish a set and a silent countdown starts on that card — 3 min after MAIN sets, 90s on accessories, 60s on core. It fades away when you're due.</p>
-        <p><b>Next up.</b> Each exercise suggests the overload move from last session: maxed the rep range → add weight; otherwise chase reps.</p>
+        <p><b>Rest timer.</b> Finish a set and a silent countdown starts on that card — 3 min after MAIN sets, 90s on accessories, 60s on core.</p>
+        <p><b>Next up.</b> Each exercise suggests the overload move from last session: maxed the rep range → add weight; otherwise chase reps. Stalled 3 sessions → it prescribes a back-off.</p>
         <p><b>Effort.</b> MAIN lift: 3 sets at 1–2 reps in reserve. Everything else: 2 sets pushed hard, ~0–1 in reserve on the last set.</p>
-        <p><b>Recovery.</b> The PROGRESS tab tracks weekly hard sets per muscle — aim for the 10–16 zone.</p>
-        <p><b>Rotation.</b> Gym days go Up A → Low A → Up B → Low B → repeat. CORE is for off days at home — log reps, or seconds for holds.</p>
+        <p><b>Rotation.</b> The amber dot marks your next day. U/L: Up A → Low A → Up B → Low B. PPL: Push → Pull → Legs. CORE is for off days at home.</p>
       </div>
     </div>
     <main class="list" id="list"></main>
@@ -275,48 +285,110 @@ body.progress .progress-view { display:block; }
   </div>
 
 <script>
-const APP_VERSION = "v4.3";
-const WORKOUTS = [
-  { id:"upperA", name:"Up A", tag:"Horizontal push / pull", exercises:[
-    { id:"ua_press",   name:"Chest Press (machine / flat DB)", sets:3, rep:"6–10",  ss:"",  main:true },
-    { id:"ua_row",     name:"Chest-Supported Row",             sets:2, rep:"8–12",  ss:"A" },
-    { id:"ua_incline", name:"Incline DB Press",                sets:2, rep:"8–12",  ss:"A" },
-    { id:"ua_pull",    name:"Lat Pulldown",                    sets:2, rep:"8–12",  ss:"" },
-    { id:"ua_lat",     name:"DB Lateral Raise",                sets:2, rep:"12–20", ss:"B" },
-    { id:"ua_tri",     name:"Triceps Pushdown",                sets:2, rep:"10–15", ss:"B" },
-    { id:"ua_bi",      name:"Biceps Curl (DB / cable)",        sets:2, rep:"10–15", ss:"" },
+const APP_VERSION = "v5";
+
+/* ============ EXERCISE CATALOG (single source of truth; history keys off these ids) ============ */
+const CATALOG = {
+  ua_press:   { name:"Chest Press (machine / flat DB)" },
+  ua_row:     { name:"Chest-Supported Row" },
+  ua_incline: { name:"Incline DB Press" },
+  ua_pull:    { name:"Lat Pulldown" },
+  ua_lat:     { name:"DB Lateral Raise" },
+  ua_tri:     { name:"Triceps Pushdown" },
+  ua_bi:      { name:"Biceps Curl (DB / cable)" },
+  la_legpress:{ name:"Leg Press" },
+  la_rdl:     { name:"Romanian Deadlift (DB / bar)" },
+  la_ext:     { name:"Leg Extension" },
+  la_curl:    { name:"Seated Leg Curl" },
+  la_calf:    { name:"Calf Raise" },
+  ub_ohp:     { name:"Shoulder Press (machine / DB)" },
+  ub_pull:    { name:"Lat Pulldown (neutral grip)" },
+  ub_incline: { name:"Incline Machine Press" },
+  ub_row:     { name:"Seated Cable Row" },
+  ub_lat:     { name:"DB Lateral Raise (B)" },
+  ub_tri:     { name:"Overhead Triceps Extension" },
+  ub_bi:      { name:"Incline DB Curl" },
+  lb_hack:    { name:"Hack Squat / Leg Press (high feet)" },
+  lb_dl:      { name:"Deadlift (bar) or Hip Thrust" },
+  lb_split:   { name:"Bulgarian Split Squat / Lunge" },
+  lb_curl:    { name:"Lying / Seated Leg Curl" },
+  lb_calf:    { name:"Calf Raise (B)" },
+  c_hollow:   { name:"Hollow Body Hold", bw:true, unit:"sec",  note:"Lower back pressed to floor. Too hard? Bend knees." },
+  c_deadbug:  { name:"Dead Bug", bw:true, unit:"reps", note:"Slow. Exhale as arm & opposite leg extend." },
+  c_revcr:    { name:"Reverse Crunch / Leg Raise", bw:true, unit:"reps", note:"Curl pelvis up, control the lowering (3s down)." },
+  c_sideplk:  { name:"Side Plank", bw:true, unit:"sec",  note:"Straight line head to feet. Progress: raise top leg." },
+  c_bicycle:  { name:"Bicycle Crunch", bw:true, unit:"reps", note:"Slow and controlled beats fast reps." },
+};
+
+/* ============ DAY DEFINITIONS ============ */
+const DAYS = {
+  upperA: { name:"Up A", tag:"Horizontal push / pull", exercises:[
+    { id:"ua_press",   sets:3, rep:"6–10",  ss:"",  main:true },
+    { id:"ua_row",     sets:2, rep:"8–12",  ss:"A" },
+    { id:"ua_incline", sets:2, rep:"8–12",  ss:"A" },
+    { id:"ua_pull",    sets:2, rep:"8–12",  ss:"" },
+    { id:"ua_lat",     sets:2, rep:"12–20", ss:"B" },
+    { id:"ua_tri",     sets:2, rep:"10–15", ss:"B" },
+    { id:"ua_bi",      sets:2, rep:"10–15", ss:"" },
   ]},
-  { id:"lowerA", name:"Low A", tag:"Quads + hinge", exercises:[
-    { id:"la_legpress", name:"Leg Press",                    sets:3, rep:"8–12",  ss:"", main:true },
-    { id:"la_rdl",      name:"Romanian Deadlift (DB / bar)",  sets:2, rep:"8–12",  ss:"" },
-    { id:"la_ext",      name:"Leg Extension",                sets:2, rep:"12–15", ss:"A" },
-    { id:"la_curl",     name:"Seated Leg Curl",              sets:2, rep:"10–15", ss:"A" },
-    { id:"la_calf",     name:"Calf Raise",                   sets:2, rep:"10–15", ss:"" },
+  lowerA: { name:"Low A", tag:"Quads + hinge", exercises:[
+    { id:"la_legpress", sets:3, rep:"8–12",  ss:"", main:true },
+    { id:"la_rdl",      sets:2, rep:"8–12",  ss:"" },
+    { id:"la_ext",      sets:2, rep:"12–15", ss:"A" },
+    { id:"la_curl",     sets:2, rep:"10–15", ss:"A" },
+    { id:"la_calf",     sets:2, rep:"10–15", ss:"" },
   ]},
-  { id:"upperB", name:"Up B", tag:"Vertical push / pull + delts", exercises:[
-    { id:"ub_ohp",     name:"Shoulder Press (machine / DB)",     sets:3, rep:"6–10",  ss:"", main:true },
-    { id:"ub_pull",    name:"Lat Pulldown (neutral grip)",       sets:2, rep:"8–12",  ss:"A" },
-    { id:"ub_incline", name:"Incline Machine Press",             sets:2, rep:"8–12",  ss:"A" },
-    { id:"ub_row",     name:"Seated Cable Row",                  sets:2, rep:"10–12", ss:"" },
-    { id:"ub_lat",     name:"DB Lateral Raise",                  sets:2, rep:"12–20", ss:"B" },
-    { id:"ub_tri",     name:"Overhead Triceps Extension",        sets:2, rep:"10–15", ss:"B" },
-    { id:"ub_bi",      name:"Incline DB Curl",                   sets:2, rep:"10–15", ss:"" },
+  upperB: { name:"Up B", tag:"Vertical push / pull + delts", exercises:[
+    { id:"ub_ohp",     sets:3, rep:"6–10",  ss:"", main:true },
+    { id:"ub_pull",    sets:2, rep:"8–12",  ss:"A" },
+    { id:"ub_incline", sets:2, rep:"8–12",  ss:"A" },
+    { id:"ub_row",     sets:2, rep:"10–12", ss:"" },
+    { id:"ub_lat",     sets:2, rep:"12–20", ss:"B" },
+    { id:"ub_tri",     sets:2, rep:"10–15", ss:"B" },
+    { id:"ub_bi",      sets:2, rep:"10–15", ss:"" },
   ]},
-  { id:"lowerB", name:"Low B", tag:"Quads + glutes / posterior", exercises:[
-    { id:"lb_hack",  name:"Hack Squat / Leg Press (high feet)", sets:3, rep:"8–12",  ss:"", main:true },
-    { id:"lb_dl",    name:"Deadlift (bar) or Hip Thrust",       sets:2, rep:"5–8",   ss:"" },
-    { id:"lb_split", name:"Bulgarian Split Squat / Lunge",      sets:2, rep:"10–12", ss:"" },
-    { id:"lb_curl",  name:"Lying / Seated Leg Curl",            sets:2, rep:"10–15", ss:"" },
-    { id:"lb_calf",  name:"Calf Raise",                         sets:2, rep:"10–15", ss:"" },
+  lowerB: { name:"Low B", tag:"Quads + glutes / posterior", exercises:[
+    { id:"lb_hack",  sets:3, rep:"8–12",  ss:"", main:true },
+    { id:"lb_dl",    sets:2, rep:"5–8",   ss:"" },
+    { id:"lb_split", sets:2, rep:"10–12", ss:"" },
+    { id:"lb_curl",  sets:2, rep:"10–15", ss:"" },
+    { id:"lb_calf",  sets:2, rep:"10–15", ss:"" },
   ]},
-  { id:"core", name:"Core", tag:"Off-day · home · bodyweight", exercises:[
-    { id:"c_hollow",  name:"Hollow Body Hold",       sets:3, rep:"20–45s", ss:"", bw:true, unit:"sec",  note:"Lower back pressed to floor. Too hard? Bend knees." },
-    { id:"c_deadbug", name:"Dead Bug",               sets:3, rep:"8–12/side", ss:"", bw:true, unit:"reps", note:"Slow. Exhale as arm & opposite leg extend." },
-    { id:"c_revcr",   name:"Reverse Crunch / Leg Raise", sets:3, rep:"10–15", ss:"", bw:true, unit:"reps", note:"Curl pelvis up, control the lowering (3s down)." },
-    { id:"c_sideplk", name:"Side Plank",             sets:3, rep:"20–40s/side", ss:"", bw:true, unit:"sec",  note:"Straight line head to feet. Progress: raise top leg." },
-    { id:"c_bicycle", name:"Bicycle Crunch",         sets:2, rep:"12–20/side", ss:"", bw:true, unit:"reps", note:"Slow and controlled beats fast reps." },
+  push: { name:"Push", tag:"Chest · shoulders · triceps", exercises:[
+    { id:"ua_press",   sets:3, rep:"6–10",  ss:"", main:true },
+    { id:"ub_incline", sets:2, rep:"8–12",  ss:"" },
+    { id:"ub_ohp",     sets:2, rep:"6–10",  ss:"" },
+    { id:"ua_lat",     sets:2, rep:"12–20", ss:"A" },
+    { id:"ua_tri",     sets:2, rep:"10–15", ss:"A" },
+    { id:"ub_tri",     sets:2, rep:"10–15", ss:"" },
   ]},
-];
+  pull: { name:"Pull", tag:"Back · biceps", exercises:[
+    { id:"ua_row",  sets:3, rep:"8–12",  ss:"", main:true },
+    { id:"ua_pull", sets:2, rep:"8–12",  ss:"" },
+    { id:"ub_row",  sets:2, rep:"10–12", ss:"" },
+    { id:"ua_bi",   sets:2, rep:"10–15", ss:"" },
+    { id:"ub_bi",   sets:2, rep:"10–15", ss:"" },
+  ]},
+  legs: { name:"Legs", tag:"Quads · hams · calves", exercises:[
+    { id:"la_legpress", sets:3, rep:"8–12",  ss:"", main:true },
+    { id:"la_rdl",      sets:2, rep:"8–12",  ss:"" },
+    { id:"la_ext",      sets:2, rep:"12–15", ss:"A" },
+    { id:"la_curl",     sets:2, rep:"10–15", ss:"A" },
+    { id:"la_calf",     sets:2, rep:"10–15", ss:"" },
+  ]},
+  core: { name:"Core", tag:"Off-day · home · bodyweight", exercises:[
+    { id:"c_hollow",  sets:3, rep:"20–45s", ss:"" },
+    { id:"c_deadbug", sets:3, rep:"8–12/side", ss:"" },
+    { id:"c_revcr",   sets:3, rep:"10–15", ss:"" },
+    { id:"c_sideplk", sets:3, rep:"20–40s/side", ss:"" },
+    { id:"c_bicycle", sets:2, rep:"12–20/side", ss:"" },
+  ]},
+};
+
+const MODES = {
+  ul:  { label:"Upper / Lower",     dayIds:["upperA","lowerA","upperB","lowerB","core"], rotation:["upperA","lowerA","upperB","lowerB"] },
+  ppl: { label:"Push / Pull / Legs", dayIds:["push","pull","legs","core"],               rotation:["push","pull","legs"] },
+};
 
 const MUSCLES = ["Chest","Back","Shoulders","Biceps","Triceps","Quads","Hams","Glutes","Calves","Core"];
 const MUSCLE_MAP = {
@@ -329,23 +401,45 @@ const MUSCLE_MAP = {
   c_hollow:{Core:1}, c_deadbug:{Core:1}, c_revcr:{Core:1}, c_sideplk:{Core:1}, c_bicycle:{Core:1},
 };
 
-const restFor = ex => ex.bw ? 60 : (ex.main ? 180 : 90);
-
-const EX_INDEX = {};
-WORKOUTS.forEach(d => d.exercises.forEach(ex => EX_INDEX[ex.id] = { dayId:d.id, name:ex.name, dayName:d.name, bw:!!ex.bw }));
-
+/* ============ STORAGE ============ */
 const PREFIX = "bb:";
 const store = {
   get(k){ try { const v = localStorage.getItem(PREFIX+k); return v ? JSON.parse(v) : null; } catch(e){ return null; } },
   set(k,v){ try { localStorage.setItem(PREFIX+k, JSON.stringify(v)); } catch(e){} },
 };
-const dayKey = id => "dayHistory:"+id;
 
-let activeId = "upperA";
+/* Shared per-exercise history: { exId: [ {d, sets:[{w,r}]} ] } */
+let EXH = null;
+function mergeInto(target, exId, sessions){
+  const cur = target[exId] || [];
+  const dates = new Set(cur.map(s=>s.d));
+  (sessions||[]).forEach(s=>{ if(s && s.d && !dates.has(s.d)){ cur.push(s); dates.add(s.d); } });
+  cur.sort((a,b)=> a.d<b.d?-1:(a.d>b.d?1:0));
+  if(cur.length) target[exId]=cur;
+}
+function loadExHist(){
+  if(EXH) return EXH;
+  EXH = store.get("exHistory") || {};
+  if(!store.get("migratedV5")){
+    /* one-time migration from the old per-day storage */
+    ["upperA","lowerA","upperB","lowerB","core"].forEach(id=>{
+      const h = store.get("dayHistory:"+id) || {};
+      Object.keys(h).forEach(exId=> mergeInto(EXH, exId, h[exId]));
+    });
+    store.set("exHistory", EXH);
+    store.set("migratedV5", true);
+  }
+  return EXH;
+}
+function saveExHist(){ store.set("exHistory", EXH); }
+
+/* ============ STATE ============ */
+let mode = store.get("mode") || "ul";
+if(!MODES[mode]) mode = "ul";
+let activeId = MODES[mode].dayIds[0];
 let curMetric = "orm";
 let curEx = "ua_press";
 let entries = {};
-const histCache = {};
 let saveTimer = null;
 let rest = null;
 const rowDone = {};
@@ -358,6 +452,7 @@ const ic = {
   hist:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.4 2.6L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>',
 };
 
+/* ============ HELPERS ============ */
 const isoToday = () => { const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
 const fmtDate = iso => { const [y,m,dd]=iso.split("-").map(Number); return new Date(y,m-1,dd).toLocaleDateString(undefined,{month:"short",day:"numeric"}); };
 const daysAgo = iso => { const [y,m,dd]=iso.split("-").map(Number); const then=new Date(y,m-1,dd); const now=new Date(); now.setHours(0,0,0,0);
@@ -365,27 +460,29 @@ const daysAgo = iso => { const [y,m,dd]=iso.split("-").map(Number); const then=n
 const volume = (sets,bw) => bw ? sets.reduce((t,s)=>t+(parseFloat(s.r)||0),0) : sets.reduce((t,s)=> t + (parseFloat(s.w)||0)*(parseFloat(s.r)||0), 0);
 const fmtSets = (sets,bw) => sets.filter(s=>s.r!=="" && (bw||s.w!=="")).map(s=> bw ? String(s.r) : s.w+"×"+s.r).join("  ");
 const blankRows = n => Array.from({length:n},()=>({w:"",r:""}));
-const getHist = id => { if(!(id in histCache)) histCache[id] = store.get(dayKey(id)) || {}; return histCache[id]; };
 const fmtVal = v => { const r=Math.round(v*10)/10; return Number.isInteger(r)?String(r):r.toFixed(1); };
 const rowComplete = (row,bw) => row.r!=="" && (bw || row.w!=="");
 const epley = sets => Math.max(...sets.map(s=> s.w*(1+s.r/30)));
+const resolve = e => Object.assign({}, CATALOG[e.id], e);   /* day entry + catalog → full exercise */
+const restFor = ex => ex.bw ? 60 : (ex.main ? 180 : 90);
 
-function prevSession(dayId, exId){
-  const s = getHist(dayId)[exId]; if(!s||!s.length) return null;
+function prevSession(exId){
+  const s = loadExHist()[exId]; if(!s||!s.length) return null;
   const t = isoToday();
   for(let i=s.length-1;i>=0;i--) if(s[i].d!==t) return { ...s[i], history:s };
   return null;
 }
-function todaySession(dayId, exId){
-  const s = getHist(dayId)[exId]; if(!s||!s.length) return null;
+function todaySession(exId){
+  const s = loadExHist()[exId]; if(!s||!s.length) return null;
   const last = s[s.length-1];
   return last.d===isoToday() ? last : null;
 }
 function initDayEntries(id){
-  const w = WORKOUTS.find(d=>d.id===id);
+  const day = DAYS[id];
   const obj = {};
-  w.exercises.forEach(ex=>{
-    const today = todaySession(id, ex.id);
+  day.exercises.forEach(e=>{
+    const ex = resolve(e);
+    const today = todaySession(ex.id);
     obj[ex.id] = today
       ? today.sets.map(x=>({w:String(x.w??""),r:String(x.r??"")}))
       : blankRows(ex.sets);
@@ -395,6 +492,7 @@ function initDayEntries(id){
   entries[id] = obj;
 }
 
+/* ============ SUGGESTIONS + STALL ============ */
 function repRange(str){ const m=String(str).match(/(\d+)\D+(\d+)/); return m?[+m[1],+m[2]]:[8,12]; }
 function roundIncrement(w){
   const step = w < 30 ? 2.5 : 5;
@@ -406,7 +504,6 @@ function suggestFor(ex, prev){
   if(!prev || !prev.sets.length) return null;
   const [lo,hi] = repRange(ex.rep);
   const unit = ex.unit==="sec" ? "s" : " reps";
-  /* stall check: no improvement across the last 3 sessions */
   const t = isoToday();
   const priorAll = (prev.history||[]).filter(s=>s.d!==t);
   if(priorAll.length>=3){
@@ -437,6 +534,7 @@ function suggestFor(ex, prev){
   return { hold:false, html:'Stay at <b>'+topW+' lb</b> — push every set to <b>'+Math.min(minR+1,hi)+'+ reps</b> (goal: all sets at '+hi+').' };
 }
 
+/* ============ REST TIMER ============ */
 function stopRest(fade){
   if(!rest) return;
   clearInterval(rest.tick);
@@ -479,6 +577,7 @@ function startRest(ex){
   rest.tick = setInterval(paint, 500);
 }
 
+/* ============ AUTO-SAVE ============ */
 function flashSave(state){
   const el=document.getElementById("saveState");
   el.textContent = state==="saving" ? "Saving…" : "Saved ✓";
@@ -490,13 +589,13 @@ function autoSave(){
   clearTimeout(saveTimer);
   flashSave("saving");
   saveTimer = setTimeout(()=>{
-    const dayId = activeId;
-    const day = WORKOUTS.find(d=>d.id===dayId);
-    const hist = getHist(dayId);
+    const day = DAYS[activeId];
+    const hist = loadExHist();
     const t = isoToday();
-    day.exercises.forEach(ex=>{
+    day.exercises.forEach(e=>{
+      const ex = resolve(e);
       const bw = !!ex.bw;
-      const rows = entries[dayId][ex.id]
+      const rows = (entries[activeId][ex.id]||[])
         .filter(s=> rowComplete(s,bw))
         .map(s=> bw ? {w:0, r:Number(s.r)} : {w:Number(s.w), r:Number(s.r)});
       let arr = hist[ex.id] || [];
@@ -510,42 +609,67 @@ function autoSave(){
         if(arr.length) hist[ex.id]=arr; else delete hist[ex.id];
       }
     });
-    store.set(dayKey(dayId), hist);
-    histCache[dayId]=hist;
+    saveExHist();
     flashSave("saved");
     updateNudge();
   }, 700);
 }
 
+/* ============ MODE + TABS ============ */
 function dueDay(){
-  const rot=["upperA","lowerA","upperB","lowerB"];
+  const rot = MODES[mode].rotation;
+  const H = loadExHist();
   let bestDay=null, bestDate="";
   rot.forEach(id=>{
-    const h=getHist(id);
-    Object.values(h).forEach(arr=>arr.forEach(s=>{ if(s.d>bestDate){ bestDate=s.d; bestDay=id; } }));
+    DAYS[id].exercises.forEach(e=>{
+      (H[e.id]||[]).forEach(s=>{ if(s.d>bestDate){ bestDate=s.d; bestDay=id; } });
+    });
   });
-  if(!bestDay) return "upperA";
-  return rot[(rot.indexOf(bestDay)+1)%4];
+  if(!bestDay) return rot[0];
+  return rot[(rot.indexOf(bestDay)+1)%rot.length];
+}
+function renderModeBar(){
+  document.querySelectorAll("#modebar button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.mode===mode);
+  });
+}
+function setMode(m){
+  if(!MODES[m] || m===mode) return;
+  stopRest(false);
+  mode = m;
+  store.set("mode", m);
+  activeId = dueDay();
+  initDayEntries(activeId);
+  renderModeBar();
+  renderTabs();
+  renderList();
 }
 function renderTabs(){
-  const el = document.getElementById("tabs"); el.innerHTML = "";
+  const el = document.getElementById("tabs");
+  const ids = MODES[mode].dayIds;
+  el.style.gridTemplateColumns = "repeat("+ids.length+",1fr)";
+  el.innerHTML = "";
   const due = dueDay();
-  WORKOUTS.forEach(w=>{
+  ids.forEach(id=>{
+    const d = DAYS[id];
     const b = document.createElement("button");
-    b.className = "tab"+(w.id==="core"?" core":"")+(w.id===activeId?" active":"");
-    b.innerHTML = w.name + (w.id===due ? '<span class="duedot"></span>' : '');
-    b.onclick = ()=>{ stopRest(false); activeId=w.id; initDayEntries(activeId); renderList(); renderTabs(); };
+    b.className = "tab"+(id==="core"?" core":"")+(id===activeId?" active":"");
+    b.innerHTML = d.name + (id===due ? '<span class="duedot"></span>' : '');
+    b.onclick = ()=>{ stopRest(false); activeId=id; initDayEntries(activeId); renderList(); renderTabs(); };
     el.appendChild(b);
   });
 }
+
+/* ============ LOG VIEW ============ */
 function renderList(){
-  const day = WORKOUTS.find(d=>d.id===activeId);
+  const day = DAYS[activeId];
   document.getElementById("daytag").textContent = day.tag;
   const list = document.getElementById("list"); list.innerHTML = "";
-  day.exercises.forEach(ex=>{
+  day.exercises.forEach(e=>{
+    const ex = resolve(e);
     const bw = !!ex.bw;
     const rows = entries[activeId][ex.id];
-    const prev = prevSession(activeId, ex.id);
+    const prev = prevSession(ex.id);
     const curVol = volume(rows,bw), prevVol = prev ? volume(prev.sets,bw) : 0;
     const delta = (prevVol>0 && curVol>0) ? curVol-prevVol : null;
 
@@ -590,10 +714,10 @@ function renderList(){
       '<div class="last-line">'+lastHtml+deltaHtml+'</div>'+histHtml+suggHtml+rowsHtml;
 
     card.querySelectorAll('input').forEach(inp=>{
-      inp.addEventListener('input', e=>{
-        const v=e.target.value;
-        const i=+e.target.dataset.i, f=e.target.dataset.f;
-        if(v!=="" && isNaN(Number(v))){ e.target.value=entries[activeId][ex.id][i][f]; return; }
+      inp.addEventListener('input', ev=>{
+        const v=ev.target.value;
+        const i=+ev.target.dataset.i, f=ev.target.dataset.f;
+        if(v!=="" && isNaN(Number(v))){ ev.target.value=entries[activeId][ex.id][i][f]; return; }
         entries[activeId][ex.id][i][f]=v;
         const doneNow = rowComplete(entries[activeId][ex.id][i], bw);
         if(doneNow && !rowDone[ex.id][i]) startRest(ex);
@@ -617,20 +741,19 @@ function refreshDelta(card, exId, prev, bw){
     s.className='delta '+(diff>0?'up':'down'); s.innerHTML=(diff>0?ic.up:ic.down)+(diff>0?'+':'')+Math.round(diff); line.appendChild(s); }
 }
 
+/* ============ PROGRESS ============ */
 function weeklyVolume(){
   const out = {}; MUSCLES.forEach(m=>out[m]={sets:0,last:null});
+  const H = loadExHist();
   const cutoff = new Date(); cutoff.setHours(0,0,0,0); cutoff.setDate(cutoff.getDate()-6);
-  WORKOUTS.forEach(d=>{
-    const h = getHist(d.id);
-    d.exercises.forEach(ex=>{
-      const map = MUSCLE_MAP[ex.id]; if(!map) return;
-      (h[ex.id]||[]).forEach(sess=>{
-        const [y,m,dd]=sess.d.split("-").map(Number);
-        const dt = new Date(y,m-1,dd);
-        Object.keys(map).forEach(mu=>{
-          if(dt>=cutoff) out[mu].sets += sess.sets.length * map[mu];
-          if(!out[mu].last || sess.d>out[mu].last) out[mu].last = sess.d;
-        });
+  Object.keys(MUSCLE_MAP).forEach(exId=>{
+    const map = MUSCLE_MAP[exId];
+    (H[exId]||[]).forEach(sess=>{
+      const [y,m,dd]=sess.d.split("-").map(Number);
+      const dt = new Date(y,m-1,dd);
+      Object.keys(map).forEach(mu=>{
+        if(dt>=cutoff) out[mu].sets += sess.sets.length * map[mu];
+        if(!out[mu].last || sess.d>out[mu].last) out[mu].last = sess.d;
       });
     });
   });
@@ -652,25 +775,24 @@ function renderRecov(){
     return '<div class="recov-row"><span class="m">'+m+'</span><span class="blocks">'+blocks+'</span>'+
       '<span class="meta"><div class="sets num">'+fmtVal(sets)+'</div><div class="ago">'+ago+'</div></span></div>';
   }).join("")+
-  '<p class="recov-note">Hard sets, last 7 days. Sage fills toward 10; amber marks the 10–16 sweet spot. Compound secondaries count half.</p>';
+  '<p class="recov-note">Hard sets, last 7 days, counted across both splits. Sage fills toward 10; amber marks the 10–16 sweet spot. Compound secondaries count half.</p>';
 }
 function renderTiles(){
+  const H = loadExHist();
   const cutoff = new Date(); cutoff.setHours(0,0,0,0); cutoff.setDate(cutoff.getDate()-6);
   const days = new Set();
   let prs = 0;
-  WORKOUTS.forEach(d=>{
-    const h = getHist(d.id);
-    d.exercises.forEach(ex=>{
-      const sessions = h[ex.id]||[];
-      sessions.forEach(s=>{
-        const [y,m,dd]=s.d.split("-").map(Number);
-        if(new Date(y,m-1,dd)>=cutoff) days.add(s.d);
-      });
-      if(sessions.length>=2){
-        const vals = sessions.map(s=> ex.bw ? Math.max(...s.sets.map(x=>x.r)) : epley(s.sets));
-        if(vals[vals.length-1] >= Math.max(...vals)) prs++;
-      }
+  Object.keys(CATALOG).forEach(exId=>{
+    const sessions = H[exId]||[];
+    sessions.forEach(s=>{
+      const [y,m,dd]=s.d.split("-").map(Number);
+      if(new Date(y,m-1,dd)>=cutoff) days.add(s.d);
     });
+    if(sessions.length>=2){
+      const bw = !!CATALOG[exId].bw;
+      const vals = sessions.map(s=> bw ? Math.max(...s.sets.map(x=>x.r)) : epley(s.sets));
+      if(vals[vals.length-1] >= Math.max(...vals)) prs++;
+    }
   });
   document.getElementById("tSessions").textContent = days.size;
   document.getElementById("tSessionsSub").textContent = days.size===1 ? "workout logged" : "workouts logged";
@@ -685,17 +807,25 @@ function metricOf(sets,bw){
 }
 function buildSelect(){
   const sel=document.getElementById("exSel"); sel.innerHTML="";
-  WORKOUTS.forEach(d=>{
-    const g=document.createElement("optgroup"); g.label=d.name;
-    d.exercises.forEach(ex=>{ const o=document.createElement("option"); o.value=ex.id; o.textContent=ex.name; g.appendChild(o); });
+  const groups = [
+    ["Presses", ["ua_press","ua_incline","ub_incline","ub_ohp"]],
+    ["Back", ["ua_row","ua_pull","ub_pull","ub_row"]],
+    ["Delts & arms", ["ua_lat","ub_lat","ua_tri","ub_tri","ua_bi","ub_bi"]],
+    ["Legs", ["la_legpress","lb_hack","la_rdl","lb_dl","lb_split","la_ext","la_curl","lb_curl","la_calf","lb_calf"]],
+    ["Core", ["c_hollow","c_deadbug","c_revcr","c_sideplk","c_bicycle"]],
+  ];
+  groups.forEach(([label, ids])=>{
+    const g=document.createElement("optgroup"); g.label=label;
+    ids.forEach(id=>{ const o=document.createElement("option"); o.value=id; o.textContent=CATALOG[id].name; g.appendChild(o); });
     sel.appendChild(g);
   });
   sel.value=curEx;
   sel.onchange=()=>{ curEx=sel.value; renderChart(); };
 }
 function seriesFor(exId){
-  const info=EX_INDEX[exId]; const sessions=getHist(info.dayId)[exId]||[];
-  return sessions.map(s=>({date:fmtDate(s.d), value:metricOf(s.sets, info.bw)}));
+  const sessions=loadExHist()[exId]||[];
+  const bw = !!CATALOG[exId].bw;
+  return sessions.map(s=>({date:fmtDate(s.d), value:metricOf(s.sets, bw)}));
 }
 function lineChart(pts){
   if(!pts.length) return '<div class="chart-empty">No sessions logged for this exercise yet.<br>Log it in the LOG tab and your trend appears here.</div>';
@@ -724,7 +854,7 @@ function lineChart(pts){
 }
 function renderChart(){
   const sel=document.getElementById("exSel"); if(sel.value!==curEx) sel.value=curEx;
-  const bw = EX_INDEX[curEx].bw;
+  const bw = !!CATALOG[curEx].bw;
   const pts=seriesFor(curEx);
   document.getElementById("chartCard").innerHTML=lineChart(pts);
   const stats=document.getElementById("stats");
@@ -746,32 +876,32 @@ function renderChart(){
   document.getElementById("metricNote").innerHTML=notes[curMetric];
 }
 
+/* ============ DATA ============ */
 function download(name,text,mime){
   const blob=new Blob([text],{type:mime}); const url=URL.createObjectURL(blob);
   const a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click();
   setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },500);
 }
 function exportCSV(){
-  let rows=[["Date","Day","Exercise","Set","Weight_lb","Reps_or_Secs"]];
-  WORKOUTS.forEach(d=>{ const h=getHist(d.id);
-    d.exercises.forEach(ex=>{ (h[ex.id]||[]).forEach(sess=>{ sess.sets.forEach((s,i)=>{
-      rows.push([sess.d, d.name, '"'+ex.name.replace(/"/g,'""')+'"', i+1, s.w, s.r]); }); }); }); });
+  const H = loadExHist();
+  let rows=[["Date","Exercise","Set","Weight_lb","Reps_or_Secs"]];
+  Object.keys(CATALOG).forEach(exId=>{
+    (H[exId]||[]).forEach(sess=>{ sess.sets.forEach((s,i)=>{
+      rows.push([sess.d, '"'+CATALOG[exId].name.replace(/"/g,'""')+'"', i+1, s.w, s.r]); }); });
+  });
   download("buffin-history.csv", rows.map(r=>r.join(",")).join("\n"), "text/csv");
 }
 function backup(){
-  const data={ version:4, app:"buffin", exported:new Date().toISOString(), days:{} };
-  WORKOUTS.forEach(d=> data.days[d.id]=getHist(d.id));
+  const data={ version:5, app:"buffin", exported:new Date().toISOString(), exHistory:loadExHist() };
   download("buffin-backup.json", JSON.stringify(data,null,2), "application/json");
   store.set("lastBackup", isoToday());
   updateNudge();
 }
 function sessionsSinceBackup(){
   const lb = store.get("lastBackup") || "";
+  const H = loadExHist();
   const dates = new Set();
-  WORKOUTS.forEach(d=>{
-    const h=getHist(d.id);
-    Object.values(h).forEach(arr=>arr.forEach(s=>{ if(s.d>lb) dates.add(s.d); }));
-  });
+  Object.keys(H).forEach(exId=> H[exId].forEach(s=>{ if(s.d>lb) dates.add(s.d); }));
   return dates.size;
 }
 function updateNudge(){
@@ -787,28 +917,27 @@ function restore(file){
   reader.onload=()=>{
     try{
       const data=JSON.parse(reader.result);
-      const days=data.days||data;
       if(!confirm("Restore this backup? It will merge into your current log.")) return;
-      Object.keys(days).forEach(dayId=>{
-        if(!WORKOUTS.find(d=>d.id===dayId)) return;
-        const incoming=days[dayId]||{}; const cur=getHist(dayId);
-        Object.keys(incoming).forEach(exId=>{
-          const seen=new Set((cur[exId]||[]).map(s=>s.d+"|"+JSON.stringify(s.sets)));
-          const merged=[...(cur[exId]||[])];
-          (incoming[exId]||[]).forEach(s=>{ const sig=s.d+"|"+JSON.stringify(s.sets); if(s.d && !seen.has(sig)){ merged.push(s); seen.add(sig); } });
-          merged.sort((a,b)=> a.d<b.d?-1:(a.d>b.d?1:0));
-          cur[exId]=merged;
+      const H = loadExHist();
+      if(data.exHistory){
+        Object.keys(data.exHistory).forEach(exId=>{ if(CATALOG[exId]) mergeInto(H, exId, data.exHistory[exId]); });
+      } else {
+        const days = data.days || data;   /* legacy v3/v4 backups */
+        Object.keys(days).forEach(dayId=>{
+          const incoming = days[dayId]||{};
+          Object.keys(incoming).forEach(exId=>{ if(CATALOG[exId]) mergeInto(H, exId, incoming[exId]); });
         });
-        store.set(dayKey(dayId),cur); histCache[dayId]=cur;
-      });
+      }
+      saveExHist();
       initDayEntries(activeId);
-      renderList(); renderChart(); renderRecov(); renderTiles();
+      renderTabs(); renderList(); renderChart(); renderRecov(); renderTiles(); updateNudge();
       alert("Backup restored.");
     }catch(e){ alert("Couldn't read that file. Make sure it's a Buffin' backup (.json)."); }
   };
   reader.readAsText(file);
 }
 
+/* ============ INIT ============ */
 function setView(v){
   document.body.classList.toggle("progress", v==="progress");
   document.getElementById("viewtog").classList.toggle("prog", v==="progress");
@@ -819,6 +948,7 @@ function setView(v){
 document.getElementById("vLog").onclick=()=>setView("log");
 document.getElementById("vProg").onclick=()=>setView("progress");
 document.getElementById("guideHead").onclick=()=>document.getElementById("guide").classList.toggle("open");
+document.querySelectorAll("#modebar button").forEach(b=>{ b.onclick=()=>setMode(b.dataset.mode); });
 document.getElementById("metricTog").querySelectorAll("button").forEach(b=>{
   b.onclick=()=>{ curMetric=b.dataset.m; document.querySelectorAll("#metricTog button").forEach(x=>x.classList.remove("active")); b.classList.add("active"); renderChart(); };
 });
@@ -826,12 +956,14 @@ document.getElementById("btnCsv").onclick=exportCSV;
 document.getElementById("btnBackup").onclick=backup;
 document.getElementById("btnRestore").onclick=()=>document.getElementById("fileIn").click();
 document.getElementById("fileIn").onchange=e=>{ if(e.target.files[0]) restore(e.target.files[0]); e.target.value=""; };
-
-document.getElementById("verStamp").textContent = APP_VERSION;
 document.getElementById("nudge").onclick=backup;
+document.getElementById("verStamp").textContent = APP_VERSION;
 
+loadExHist();
+activeId = dueDay();
 initDayEntries(activeId);
 buildSelect();
+renderModeBar();
 renderTabs();
 renderList();
 updateNudge();
